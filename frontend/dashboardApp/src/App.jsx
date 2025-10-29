@@ -6,7 +6,9 @@ function App() {
       {/* Nav */}
       <nav className="navbar bg-base-200 rounded-2xl shadow-sm flex flex-wrap justify-between px-4 md:px-6 py-2">
         <div className="flex-1 flex justify-between items-center w-full md:w-auto">
-          <a className="btn btn-ghost text-xl italic">Dashboard</a>
+          <a className="btn btn-ghost text-green-500 text-xl italic">
+            Dashboard
+          </a>
           <div className="flex gap-2 md:hidden">
             <input
               type="text"
@@ -122,14 +124,14 @@ function App() {
       {/* Dashboard Section */}
       <main className="mt-5 flex justify-start w-full">
         <div className="bg-base-200 min-h-screen rounded-3xl w-full text-left px-6 md:px-10 py-8">
-          <div className="flex">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex-1">
               <h1 className="font-lato text-3xl md:text-4xl font-bold">
                 Dashboard
               </h1>
               <p className="text-gray-400 mt-2.5">Plan your goals with ease</p>
             </div>
-            <button className="bg-green-500 hover:bg-green-300 text-white rounded-2xl w-[140px] h-[40px]">
+            <button className="bg-green-500 hover:bg-green-300 text-white rounded-2xl w-auto sm:w-[100px] h-[40px]">
               Add
             </button>
           </div>
