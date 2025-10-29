@@ -131,7 +131,7 @@ function App() {
               </h1>
               <p className="text-gray-400 mt-2.5">Plan your goals with ease</p>
             </div>
-            <button className="bg-green-500 hover:bg-green-300 text-white rounded-2xl w-auto sm:w-[100px] h-[40px]">
+            <button className="bg-green-500 font-lato hover:bg-green-300 text-white rounded-2xl w-auto sm:w-[100px] h-[40px]">
               Add
             </button>
           </div>
@@ -149,7 +149,7 @@ function App() {
                   visual indicators.
                 </p>
                 <div className="card-actions justify-end">
-                  <button className="btn bg-green-500 hover:bg-green-600 border-none text-white">
+                  <button className="btn rounded-2xl bg-green-500 hover:bg-green-600 border-none text-white">
                     View Goals
                   </button>
                 </div>
@@ -167,7 +167,7 @@ function App() {
                   single day.
                 </p>
                 <div className="card-actions justify-end">
-                  <button className="btn border-green-300 text-black">
+                  <button className="btn rounded-2xl border-green-300 text-black">
                     View Tasks
                   </button>
                 </div>
@@ -185,7 +185,7 @@ function App() {
                   analytics.
                 </p>
                 <div className="card-actions justify-end">
-                  <button className="btn border-green-300 text-black">
+                  <button className="btn border-green-300 rounded-2xl text-black">
                     Analyze
                   </button>
                 </div>
@@ -234,6 +234,14 @@ function App() {
                 <div className="stat-desc text-secondary">
                   31 tasks remaining
                 </div>
+              </div>
+            </div>
+            {/*table*/}
+            <div className="stats shadow w-full">
+              <div className="stat w-full">
+                <div className="stat-title">Total Page Views</div>
+                <div className="stat-value">89,400</div>
+                <div className="stat-desc">21% more than last month</div>
               </div>
             </div>
           </div>
