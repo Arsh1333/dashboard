@@ -9,7 +9,6 @@ export default function Hero() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch Goals
   useEffect(() => {
     if (!showGoals) return;
     const fetchGoals = async () => {
@@ -30,7 +29,6 @@ export default function Hero() {
     fetchGoals();
   }, [showGoals]);
 
-  // ✅ Fetch Tasks
   useEffect(() => {
     if (!showTasks) return;
     const fetchTasks = async () => {
@@ -51,7 +49,6 @@ export default function Hero() {
     fetchTasks();
   }, [showTasks]);
 
-  // ✅ Add Goal
   const handleAddGoal = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
@@ -76,7 +73,6 @@ export default function Hero() {
     }
   };
 
-  // ✅ Add Task
   const handleAddTask = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
@@ -101,7 +97,6 @@ export default function Hero() {
     }
   };
 
-  // ✅ Delete Goal
   const handleDeleteGoal = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -115,7 +110,6 @@ export default function Hero() {
     }
   };
 
-  // ✅ Delete Task
   const handleDeleteTask = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -204,7 +198,6 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* ✅ YOUR STATS SECTION (UNTOUCHED) */}
           <div className="stats shadow mt-[30px]">
             <div className="stat">
               <div className="stat-title">Total Likes</div>
