@@ -50,6 +50,14 @@ A full-stack productivity management web app that allows users to **set goals, m
 
 ---
 
+The production-ready integration would rely on:
+- **Environment-aware configuration**,  
+- **Secure JWT handling**,  
+- **Reverse-proxy-based routing**,  
+- **Observability and scaling tools**,  
+to ensure smooth and scalable communication between frontend and backend as the user base grows.
+
+
 ## 🔑 Environment Variables
 
 Create a `.env` file inside `backend/` with:
@@ -58,3 +66,5 @@ Create a `.env` file inside `backend/` with:
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
+
+
