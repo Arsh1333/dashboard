@@ -8,6 +8,7 @@ export default function Hero() {
   const [goals, setGoals] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showInsights, setShowInsights] = useState(false);
 
   useEffect(() => {
     if (!showGoals) return;
@@ -197,13 +198,15 @@ export default function Hero() {
                 analytics.
               </p>
               <div className="card-actions justify-end">
-                <button className="btn border-green-300 rounded-2xl text-black">
+                <button
+                  onClick={() => setShowInsights(true)}
+                  className="btn border-green-300 rounded-2xl text-black"
+                >
                   Analyze
                 </button>
               </div>
             </div>
           </div>
-
           <div className="stats shadow mt-[30px]">
             <div className="stat">
               <div className="stat-title">Total Likes</div>
@@ -232,6 +235,66 @@ export default function Hero() {
             </div>
           </div>
         </div>
+
+        {showInsights && (
+          <dialog open className="modal modal-open">
+            <div className="modal-box rounded-3xl max-w-2xl">
+              <h3 className="font-bold text-lg mb-4 text-green-600">
+                Progress Insights
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="card bg-green-100 shadow-sm rounded-2xl p-4 text-center">
+                  <h2 className="font-semibold text-green-700 text-xl">
+                    Total Goals
+                  </h2>
+                  <p className="text-3xl font-bold mt-2">{goals.length}</p>
+                  <p className="text-gray-600 mt-1">Goals you’ve set so far</p>
+                </div>
+
+                <div className="card bg-blue-100 shadow-sm rounded-2xl p-4 text-center">
+                  <h2 className="font-semibold text-blue-700 text-xl">
+                    Total Tasks
+                  </h2>
+                  <p className="text-3xl font-bold mt-2">{tasks.length}</p>
+                  <p className="text-gray-600 mt-1">Tasks created till now</p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="font-semibold text-gray-700 mb-2">
+                  Overall Progress
+                </h4>
+                <progress
+                  className="progress progress-success w-full"
+                  value={
+                    goals.length + tasks.length > 0
+                      ? (tasks.length / (goals.length + tasks.length)) * 100
+                      : 0
+                  }
+                  max="100"
+                ></progress>
+                <p className="text-gray-500 mt-2">
+                  {Math.round(
+                    goals.length + tasks.length > 0
+                      ? (tasks.length / (goals.length + tasks.length)) * 100
+                      : 0
+                  )}
+                  % task completion rate
+                </p>
+              </div>
+
+              <div className="modal-action flex justify-end">
+                <button
+                  onClick={() => setShowInsights(false)}
+                  className="btn btn-ghost"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </dialog>
+        )}
 
         {showGoals && (
           <dialog open className="modal modal-open">
