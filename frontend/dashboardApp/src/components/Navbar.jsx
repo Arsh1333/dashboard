@@ -62,11 +62,11 @@ export default function Navbar() {
 
       {/* Desktop dropdown */}
       <div className="hidden md:flex gap-3 items-center">
-        <input
+        {/* <input
           type="text"
           placeholder="Search"
           className="input input-bordered w-32 md:w-56 rounded-4xl"
-        />
+        /> */}
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}

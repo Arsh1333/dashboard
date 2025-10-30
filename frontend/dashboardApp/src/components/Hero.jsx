@@ -15,9 +15,12 @@ export default function Hero() {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/goals", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          "https://dashboard-4l2c.onrender.com/api/goals",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = await res.json();
         setGoals(data);
       } catch (err) {
@@ -35,9 +38,12 @@ export default function Hero() {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/tasks", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          "https://dashboard-4l2c.onrender.com/api/tasks",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = await res.json();
         setTasks(data);
       } catch (err) {
@@ -56,7 +62,7 @@ export default function Hero() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/goals", {
+      const res = await fetch("https://dashboard-4l2c.onrender.com/api/goals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +86,7 @@ export default function Hero() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      const res = await fetch("https://dashboard-4l2c.onrender.com/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +106,7 @@ export default function Hero() {
   const handleDeleteGoal = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/goals/${id}`, {
+      await fetch(`https://dashboard-4l2c.onrender.com/api/goals/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -113,7 +119,7 @@ export default function Hero() {
   const handleDeleteTask = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      await fetch(`https://dashboard-4l2c.onrender.com/api/tasks/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

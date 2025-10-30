@@ -18,9 +18,12 @@ export default function Profile() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/api/auth/dashboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          "https://dashboard-4l2c.onrender.com/api/auth/dashboard",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = await res.json();
         setUser(data.user);
       } catch (err) {
@@ -49,9 +52,9 @@ export default function Profile() {
     };
 
     if (activeTab === "goals")
-      fetchData("http://localhost:5000/api/goals", setGoals);
+      fetchData("https://dashboard-4l2c.onrender.com/api/goals", setGoals);
     if (activeTab === "tasks")
-      fetchData("http://localhost:5000/api/tasks", setTasks);
+      fetchData("https://dashboard-4l2c.onrender.com/api/tasks", setTasks);
   }, [activeTab]);
 
   // Add goal/task
@@ -61,7 +64,7 @@ export default function Profile() {
     const description = e.target.description.value;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/goals", {
+      const res = await fetch("https://dashboard-4l2c.onrender.com/api/goals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +87,7 @@ export default function Profile() {
     const description = e.target.description.value;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      const res = await fetch("https://dashboard-4l2c.onrender.com/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +108,7 @@ export default function Profile() {
   const handleDeleteGoal = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/goals/${id}`, {
+      await fetch(`https://dashboard-4l2c.onrender.com/api/goals/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -118,7 +121,7 @@ export default function Profile() {
   const handleDeleteTask = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/tasks/${id}`, {
+      await fetch(`https://dashboard-4l2c.onrender.com/api/tasks/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -135,7 +138,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `http://localhost:5000/api/goals/${editingGoal._id}`,
+        `https://dashboard-4l2c.onrender.com/api/goals/${editingGoal._id}`,
         {
           method: "PUT",
           headers: {
@@ -164,7 +167,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `http://localhost:5000/api/tasks/${editingTask._id}`,
+        `https://dashboard-4l2c.onrender.com/api/tasks/${editingTask._id}`,
         {
           method: "PUT",
           headers: {
