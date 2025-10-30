@@ -1,20 +1,35 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
-import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
+import Profile from "./components/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar></Navbar>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Hero></Hero>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="/signup" element={<SignUp></SignUp>}></Route>
-        <Route path="/profile" element={<Profile></Profile>}></Route>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Hero />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

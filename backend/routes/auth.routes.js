@@ -42,7 +42,22 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 });
-router.get("/dashboard", verifyToken, (req, res) => {
-  res.json({ msg: `Welcome user ${req.user}` });
+router.get("/dashboard", verifyToken, async(req, res) => {
+   try {
+    const user = await User.findById(req.user).select("-password");
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.json({
+      user: {
+        name: user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server error" });
+  }
 });
 export default router;

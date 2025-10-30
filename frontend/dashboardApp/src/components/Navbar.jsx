@@ -2,6 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <nav className="navbar bg-base-200 rounded-2xl shadow-sm flex flex-wrap justify-between px-4 md:px-6 py-2">
@@ -49,14 +53,7 @@ export default function Navbar() {
                 <a>Settings</a>
               </li>
               <li>
-                <button
-                  onClick={() => {
-                    document.activeElement.blur();
-                    navigate("/login");
-                  }}
-                >
-                  Logout
-                </button>
+                <button onClick={handleLogout}>Logout</button>;
               </li>
             </ul>
           </div>
