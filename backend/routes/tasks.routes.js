@@ -40,4 +40,12 @@ router.delete("/:id", verifyToken, async (req, res) => {
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 });
+
+router.put("/:id", verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { title, description } = req.body;
+  const task = await Task.findByIdAndUpdate(id, { title, description }, { new: true });
+  res.json(task);
+});
+
 export default router;

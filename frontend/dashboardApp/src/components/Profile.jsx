@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const [activeTab, setActiveTab] = useState("goals"); // "goals" | "tasks" | "info"
+  const [activeTab, setActiveTab] = useState("goals");
   const [goals, setGoals] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [showAddTask, setShowAddTask] = useState(false);
+  const [editingGoal, setEditingGoal] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
 
   // Fetch user info
   useEffect(() => {
@@ -28,49 +30,31 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
-  // Fetch Goals when goals tab active
+  // Fetch goals/tasks
   useEffect(() => {
-    if (activeTab !== "goals") return;
-    const fetchGoals = async () => {
+    const fetchData = async (url, setter) => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/goals", {
+        const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        setGoals(data);
+        setter(data);
       } catch (err) {
-        console.error("Error fetching goals:", err);
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchGoals();
+
+    if (activeTab === "goals")
+      fetchData("http://localhost:5000/api/goals", setGoals);
+    if (activeTab === "tasks")
+      fetchData("http://localhost:5000/api/tasks", setTasks);
   }, [activeTab]);
 
-  // Fetch Tasks when tasks tab active
-  useEffect(() => {
-    if (activeTab !== "tasks") return;
-    const fetchTasks = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/tasks", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        setTasks(data);
-      } catch (err) {
-        console.error("Error fetching tasks:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTasks();
-  }, [activeTab]);
-
-  // Add Goal
+  // Add goal/task
   const handleAddGoal = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
@@ -89,13 +73,11 @@ export default function Profile() {
       setGoals((prev) => [...prev, newGoal.goal || newGoal]);
       e.target.reset();
       setShowAddGoal(false);
-      setActiveTab("goals"); // ensure user stays/returns to goals
     } catch (err) {
       console.error("Error adding goal:", err);
     }
   };
 
-  // Add Task
   const handleAddTask = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
@@ -114,13 +96,12 @@ export default function Profile() {
       setTasks((prev) => [...prev, newTask.task || newTask]);
       e.target.reset();
       setShowAddTask(false);
-      setActiveTab("tasks"); // ensure user stays/returns to tasks
     } catch (err) {
       console.error("Error adding task:", err);
     }
   };
 
-  // Delete Goal
+  // Delete goal/task
   const handleDeleteGoal = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -128,13 +109,12 @@ export default function Profile() {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      setGoals((prev) => prev.filter((goal) => goal._id !== id));
+      setGoals((prev) => prev.filter((g) => g._id !== id));
     } catch (err) {
       console.error("Error deleting goal:", err);
     }
   };
 
-  // Delete Task
   const handleDeleteTask = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -142,16 +122,75 @@ export default function Profile() {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      setTasks((prev) => prev.filter((task) => task._id !== id));
+      setTasks((prev) => prev.filter((t) => t._id !== id));
     } catch (err) {
       console.error("Error deleting task:", err);
+    }
+  };
+
+  // Update goal/task
+  const handleUpdateGoal = async (e) => {
+    e.preventDefault();
+    const { title, description } = e.target;
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `http://localhost:5000/api/goals/${editingGoal._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: title.value,
+            description: description.value,
+          }),
+        }
+      );
+      const updated = await res.json();
+      setGoals((prev) =>
+        prev.map((g) => (g._id === updated._id ? updated : g))
+      );
+      setEditingGoal(null);
+    } catch (err) {
+      console.error("Error updating goal:", err);
+    }
+  };
+
+  const handleUpdateTask = async (e) => {
+    e.preventDefault();
+    const { title, description } = e.target;
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `http://localhost:5000/api/tasks/${editingTask._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: title.value,
+            description: description.value,
+          }),
+        }
+      );
+      const updated = await res.json();
+      setTasks((prev) =>
+        prev.map((t) => (t._id === updated._id ? updated : t))
+      );
+      setEditingTask(null);
+    } catch (err) {
+      console.error("Error updating task:", err);
     }
   };
 
   return (
     <div className="font-lato mt-4 rounded-4xl min-h-screen bg-base-200 flex flex-col items-center py-10 px-4 md:px-10">
       <div className="w-full max-w-3xl bg-white rounded-3xl shadow-lg p-8 md:p-10">
-        {/* User Info Header */}
+        {/* Header */}
         <div className="text-center mb-10">
           <div className="avatar mb-4">
             <div className="w-24 rounded-full ring ring-green-400 ring-offset-base-100 ring-offset-2">
@@ -196,13 +235,11 @@ export default function Profile() {
         </div>
 
         <div className="mt-6">
-          {/* GOALS TAB */}
           {activeTab === "goals" && (
             <div className="bg-base-100 border-base-300 p-6 rounded-2xl shadow-sm">
               <h2 className="font-semibold text-green-600 mb-3 text-lg">
                 Your Goals
               </h2>
-
               {loading ? (
                 <p className="text-gray-400">Loading goals...</p>
               ) : goals.length > 0 ? (
@@ -219,8 +256,14 @@ export default function Profile() {
                         <p className="text-gray-700">{goal.description}</p>
                         <div className="mt-3 flex gap-2">
                           <button
+                            onClick={() => setEditingGoal(goal)}
+                            className="btn rounded-4xl bg-yellow-400 hover:bg-yellow-300 text-black"
+                          >
+                            Edit
+                          </button>
+                          <button
                             onClick={() => handleDeleteGoal(goal._id)}
-                            className="btn btn-xs bg-red-500 hover:bg-red-400 text-white"
+                            className="btn rounded-4xl bg-red-500 hover:bg-red-400 text-white"
                           >
                             Delete
                           </button>
@@ -232,11 +275,10 @@ export default function Profile() {
               ) : (
                 <p className="text-gray-400">No goals found.</p>
               )}
-
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setShowAddGoal(true)}
-                  className="btn bg-green-500 hover:bg-green-400 text-white"
+                  className="btn rounded-4xl bg-green-500 hover:bg-green-400 text-white"
                 >
                   Add Goal
                 </button>
@@ -250,7 +292,6 @@ export default function Profile() {
               <h2 className="font-semibold text-blue-600 mb-3 text-lg">
                 Your Tasks
               </h2>
-
               {loading ? (
                 <p className="text-gray-400">Loading tasks...</p>
               ) : tasks.length > 0 ? (
@@ -267,8 +308,14 @@ export default function Profile() {
                         <p className="text-gray-700">{task.description}</p>
                         <div className="mt-3 flex gap-2">
                           <button
+                            onClick={() => setEditingTask(task)}
+                            className="btn  rounded-4xl bg-yellow-400 hover:bg-yellow-300 text-black"
+                          >
+                            Edit
+                          </button>
+                          <button
                             onClick={() => handleDeleteTask(task._id)}
-                            className="btn btn-xs bg-red-500 hover:bg-red-400 text-white"
+                            className="btn rounded-4xl  bg-red-500 hover:bg-red-400 text-white"
                           >
                             Delete
                           </button>
@@ -280,11 +327,10 @@ export default function Profile() {
               ) : (
                 <p className="text-gray-400">No tasks found.</p>
               )}
-
               <div className="mt-4 flex justify-end">
                 <button
                   onClick={() => setShowAddTask(true)}
-                  className="btn bg-blue-500 hover:bg-blue-400 text-white"
+                  className="btn rounded-4xl bg-blue-500 hover:bg-blue-400 text-white"
                 >
                   Add Task
                 </button>
@@ -292,7 +338,6 @@ export default function Profile() {
             </div>
           )}
 
-          {/* PERSONAL INFO TAB */}
           {activeTab === "info" && (
             <div className="bg-base-100 border-base-300 p-6 rounded-2xl shadow-sm">
               <h2 className="font-semibold text-green-600 mb-3 text-lg">
@@ -308,44 +353,47 @@ export default function Profile() {
                 <li>
                   <strong>Member since:</strong> Jan 2025
                 </li>
-                {/* Keep this area available for editable profile fields if you want to expand later */}
               </ul>
             </div>
           )}
         </div>
       </div>
 
-      {/* ADD GOAL MODAL */}
-      {showAddGoal && (
+      {(showAddGoal || editingGoal) && (
         <dialog open className="modal modal-open">
           <div className="modal-box rounded-3xl max-w-md">
             <h3 className="font-bold text-lg mb-4 text-green-600">
-              Add New Goal
+              {editingGoal ? "Edit Goal" : "Add New Goal"}
             </h3>
-            <form onSubmit={handleAddGoal}>
+            <form onSubmit={editingGoal ? handleUpdateGoal : handleAddGoal}>
               <input
                 type="text"
                 name="title"
                 className="input input-bordered w-full mb-3"
                 placeholder="Goal title"
+                defaultValue={editingGoal?.title || ""}
                 required
               />
               <textarea
                 name="description"
                 className="textarea textarea-bordered w-full mb-3"
                 placeholder="Goal description"
+                defaultValue={editingGoal?.description || ""}
                 required
               ></textarea>
               <div className="modal-action">
                 <button
                   type="submit"
-                  className="btn bg-green-500 hover:bg-green-400 text-white"
+                  className="btn rounded-4xl bg-green-500 hover:bg-green-400 text-white"
                 >
                   Save
                 </button>
                 <button
                   type="button"
-                  onClick={() => setShowAddGoal(false)}
+                  onClick={() => {
+                    setShowAddGoal(false);
+                    setEditingGoal(null);
+                  }}
                   className="btn btn-ghost"
                 >
                   Cancel
@@ -356,37 +404,41 @@ export default function Profile() {
         </dialog>
       )}
 
-      {/* ADD TASK MODAL */}
-      {showAddTask && (
+      {(showAddTask || editingTask) && (
         <dialog open className="modal modal-open">
           <div className="modal-box rounded-3xl max-w-md">
             <h3 className="font-bold text-lg mb-4 text-blue-600">
-              Add New Task
+              {editingTask ? "Edit Task" : "Add New Task"}
             </h3>
-            <form onSubmit={handleAddTask}>
+            <form onSubmit={editingTask ? handleUpdateTask : handleAddTask}>
               <input
                 type="text"
                 name="title"
                 className="input input-bordered w-full mb-3"
                 placeholder="Task title"
+                defaultValue={editingTask?.title || ""}
                 required
               />
               <textarea
                 name="description"
                 className="textarea textarea-bordered w-full mb-3"
                 placeholder="Task description"
+                defaultValue={editingTask?.description || ""}
                 required
               ></textarea>
               <div className="modal-action">
                 <button
                   type="submit"
-                  className="btn bg-blue-500 hover:bg-blue-400 text-white"
+                  className="btn rounded-4xl bg-blue-500 hover:bg-blue-400 text-white"
                 >
                   Save
                 </button>
                 <button
                   type="button"
-                  onClick={() => setShowAddTask(false)}
+                  onClick={() => {
+                    setShowAddTask(false);
+                    setEditingTask(null);
+                  }}
                   className="btn btn-ghost"
                 >
                   Cancel
