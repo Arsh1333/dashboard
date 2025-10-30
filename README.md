@@ -25,7 +25,8 @@ A full-stack productivity management web app that allows users to **set goals, m
 ### 👤 User Management
 - Signup & Login with JWT Authentication  
 - Protected routes (`/`, `/profile`) accessible only to logged-in users  
-- Profile section with user info fetched from backend  
+- Profile section with user info fetched from backend
+- - **Update Feature:** Users can edit and update their goals and task in profile section
 
 ### 🎯 Goals Management
 - Add new personal goals  
