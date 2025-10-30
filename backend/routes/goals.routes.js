@@ -30,5 +30,15 @@ router.post("/", verifyToken, async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 });
+router.delete("/:id", verifyToken, async (req, res) => {
+  try {
+    const goal = await Goal.findOneAndDelete({ _id: req.params.id, user: req.user });
+    if (!goal) return res.status(404).json({ msg: "Goal not found" });
+    res.json({ msg: "Goal deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err.message });
+  }
+});
+
 
 export default router;

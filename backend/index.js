@@ -5,6 +5,8 @@ import connectDB from "./config/db.config.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js"
 import goalRoutes from "./routes/goals.routes.js"
+import taskRoutes from "./routes/tasks.routes.js";
+
 
 dotenv.config();
 const app = express();
@@ -20,6 +22,7 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/goals", goalRoutes);
+app.use("/api/tasks", taskRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend working!");
