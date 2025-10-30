@@ -49,4 +49,11 @@ A full-stack productivity management web app that allows users to **set goals, m
 
 ---
 
+## 🔑 Environment Variables
 
+Create a `.env` file inside `backend/` with:
+
+```bash
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
